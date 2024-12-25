@@ -38,7 +38,7 @@ variable "helm" {
 
     postrender = optional(list(object({
       binary_path = string
-      args        = optional(list(string), [])
+      args        = optional(list(string))
     })), [])
 
     set = optional(list(object({

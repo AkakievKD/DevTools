@@ -38,7 +38,7 @@ resource "helm_release" "helm-chart" {
   values = lookup(each.value, "values", "") != "" ? [for v in lookup(each.value, "values", []) : file(v)] : []
 
   dynamic "postrender" {
-    for_each = { for i in each.value.postrender : format("%s", i.binary_path) => i }
+    for_each = { for i in each.value.postrender : format("%s-%#v", i.binary_path, i.args) => i }
     content {
       binary_path = postrender.value.binary_path
       args        = postrender.value.args
