@@ -154,8 +154,23 @@ variable "argocd_application" {
       chart           = optional(string, "")
       path            = optional(string, ".")
 
+      plugin = optional(object({
+        name = optional(string)
+
+        env = optional(list(object({
+          name  = optional(string)
+          value = optional(string)
+        })), [])
+      }), null)
+
       helm = optional(object({
-        value_files = optional(list(string))
+        value_files                = optional(list(string))
+        ignore_missing_value_files = optional(bool)
+        pass_credentials           = optional(bool)
+        release_name               = optional(string)
+        skip_crds                  = optional(bool)
+        values                     = optional(string)
+        version                    = optional(string)
 
         parameter = optional(list(object({
           force_string = optional(bool)
@@ -199,7 +214,6 @@ variable "argocd_application" {
           })), [])
         }), null)
       }), null)
-
     })), [])
 
     value_files_source = optional(list(object({
@@ -243,7 +257,6 @@ variable "argocd_application" {
       prune     = optional(bool)
       self_heal = optional(bool)
     }), null)
-
   }))
   default = {}
 }

@@ -34,7 +34,13 @@ resource "argocd_application" "application" {
         dynamic "helm" {
           for_each = can(source.value.helm) && source.value.helm != null ? [source.value.helm] : []
           content {
-            value_files = try(helm.value.value_files, null)
+            value_files                = try(helm.value.value_files, null)
+            ignore_missing_value_files = try(helm.value.ignore_missing_value_files, null)
+            pass_credentials           = try(helm.value.pass_credentials, null)
+            release_name               = try(helm.value.release_name, null)
+            skip_crds                  = try(helm.value.skip_crds, null)
+            values                     = try(helm.value.values, null)
+            version                    = try(helm.value.version, null)
 
             dynamic "parameter" {
               for_each = can(helm.value.parameter) && helm.value.parameter != null ? helm.value.parameter : []
@@ -65,6 +71,22 @@ resource "argocd_application" "application" {
             common_labels      = try(kustomize.value.common_labels, null)
             images             = try(kustomize.value.images, null)
           }
+        }
+
+        dynamic "plugin" {
+          for_each = can(source.value.plugin) && source.value.plugin != null ? [source.value.plugin] : []
+          content {
+            name = try(plugin.value.name, null)
+
+            dynamic "env" {
+              for_each = can(plugin.value.plugin) && plugin.value.plugin != null ? plugin.value.plugin : []
+              content {
+                name  = try(env.value.name, null)
+                value = try(env.value.value, null)
+              }
+            }
+          }
+
         }
 
         dynamic "directory" {
