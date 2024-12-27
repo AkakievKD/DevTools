@@ -1,5 +1,5 @@
 resource "argocd_repository" "repository" {
-  for_each                      = { for key, value in var.argocd_repository : key => value }
+  for_each                      = { for i in var.argocd_repository : i.repo => i }
   repo                          = each.value.repo
   type                          = each.value.type
   name                          = each.value.name

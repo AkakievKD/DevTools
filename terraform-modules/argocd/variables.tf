@@ -86,45 +86,33 @@ variable "argocd_account_token" {
 
 variable "argocd_cluster" {
   type = map(object({
-    server = string
+    server       = string
+    bearer_token = optional(string)
+    namespaces   = optional(list(string))
+    project      = optional(string)
+    shard        = optional(string)
+    annotations  = optional(map(string))
+    labels       = optional(map(string))
 
-    tls_client_config = optional(object({
-      ca_data   = optional(string) #certificate-authority-data
-      cert_data = optional(string) #client-certificate-data
-      key_data  = optional(string) #client-key-data
-      insecure  = optional(bool)
-    }), null)
-  }))
-  default = {}
-}
-
-variable "argocd_application_set" {
-  type = map(object({
-    repo_url                           = string
-    revision                           = optional(string, "main")
-    project                            = optional(string, "default")
-    directory_path                     = string
-    template_metadata_name             = optional(string, "{{path.basename}}")
-    source_repo_url                    = string
-    source_target_revision             = optional(string, "main")
-    source_path                        = string
-    value_files_source_repo_url        = string
-    value_files_source_ref             = string
-    value_files_source_path            = optional(string)
-    value_files_source_target_revision = optional(string, "HEAD")
-    helm_value_files                   = optional(list(string), [""])
-    destination_server                 = string
-    destination_namespace              = optional(string)
-    sync_options                       = optional(list(string))
-
-    parameter = optional(list(object({
-      name  = optional(string, "")
-      value = optional(string, "")
+    aws_auth_config = optional(list(object({
+      cluster_name = optional(string)
+      role_arn     = optional(string)
     })), [])
 
-    sync_policy_automated = optional(object({
-      prune     = optional(bool)
-      self_heal = optional(bool)
+    exec_provider_config = optional(object({
+      api_version  = optional(string)
+      args         = optional(list(string))
+      command      = optional(string)
+      env          = optional(map(string))
+      install_hint = optional(string)
+    }), null)
+
+    tls_client_config = optional(object({
+      ca_data     = optional(string) #certificate-authority-data
+      cert_data   = optional(string) #client-certificate-data
+      key_data    = optional(string) #client-key-data
+      server_name = optional(string)
+      insecure    = optional(bool)
     }), null)
   }))
   default = {}

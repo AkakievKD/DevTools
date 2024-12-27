@@ -86,7 +86,6 @@ resource "argocd_application" "application" {
               }
             }
           }
-
         }
 
         dynamic "directory" {
