@@ -1,4 +1,4 @@
-data "helm_template" "helm-chart-template" {
+data "helm_template" "helm_chart_template" {
   for_each                   = { for key, value in var.helm_template : key => value }
   chart                      = each.value.chart
   name                       = each.key
@@ -16,7 +16,7 @@ data "helm_template" "helm-chart-template" {
   keyring                    = each.value.keyring
   kube_version               = each.value.kube_version
   manifest                   = each.value.manifest
-  manifests                  = each.value.manifest
+  manifests                  = each.value.manifests
   namespace                  = each.value.namespace
   notes                      = each.value.notes
   pass_credentials           = each.value.pass_credentials

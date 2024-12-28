@@ -1,4 +1,4 @@
-resource "helm_release" "helm-chart" {
+resource "helm_release" "helm_chart" {
   for_each                   = { for key, value in var.helm : key => value }
   name                       = each.key
   namespace                  = each.value.namespace

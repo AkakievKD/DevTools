@@ -1,5 +1,5 @@
 resource "argocd_repository_credentials" "repository_credentials" {
-  for_each                      = { for i in var.argocd_repository_credentials : i.url => i }
+  for_each                      = { for key in var.argocd_repository_credentials : key.url => key }
   url                           = each.value.url
   enable_oci                    = each.value.enable_oci
   githubapp_enterprise_base_url = each.value.githubapp_enterprise_base_url
