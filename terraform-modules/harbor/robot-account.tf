@@ -8,13 +8,13 @@ resource "harbor_robot_account" "robot_account" {
   duration    = each.value.duration
 
   dynamic "permissions" {
-    for_each = { for i in each.value.permissions : format("%s-%s", i.kind, i.namespace) => i }
+    for_each = can(each.value.permissions) && each.value.permissions != null ? each.value.permissions : []
     content {
-      kind      = each.value.kind
-      namespace = each.value.namespace
+      kind      = permissions.value.kind
+      namespace = permissions.value.namespace
 
       dynamic "access" {
-        for_each = { for i in permissions.value.access : format("%s-%s-%s", i.action, i.resource, i.effect) => i }
+        for_each = can(permissions.value.access) && permissions.value.access != null ? permissions.value.access : []
         content {
           action   = access.value.action
           resource = access.value.resource

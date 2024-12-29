@@ -4,7 +4,7 @@ resource "harbor_retention_policy" "retention_policy" {
   schedule = each.value.schedule
 
   dynamic "rule" {
-    for_each = { for i in each.value.filters : format("%t-%t-%g-%g-%g-%g-%s-%s-%s-%s-%t", i.always_retain, i.disabled, i.most_recently_pulled, i.most_recently_pushed, i.n_days_since_last_pull, i.n_days_since_last_push, i.repo_excluding, i.repo_matching, i.tag_excluding, i.tag_matching, i.untagged_artifacts) => i }
+    for_each = can(each.value.rule) && each.value.rule != null ? each.value.rule : []
     content {
       always_retain          = rule.value.always_retain
       disabled               = rule.value.disabled

@@ -12,11 +12,11 @@ resource "harbor_config_system" "config_system" {
   dynamic "banner_message" {
     for_each = can(each.value.banner_message) && each.value.banner_message != null ? [each.value.banner_message] : []
     content {
-      message   = try(banner_message.value.message, null)
-      closable  = try(banner_message.value.closable, null)
-      type      = try(banner_message.value.type, null)
-      from_date = try(banner_message.value.from_date, null)
-      to_date   = try(banner_message.value.to_date, null)
+      message   = banner_message.value.message
+      closable  = banner_message.value.closable
+      type      = banner_message.value.type
+      from_date = banner_message.value.from_date
+      to_date   = banner_message.value.to_date
     }
   }
 }

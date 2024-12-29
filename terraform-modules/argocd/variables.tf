@@ -138,9 +138,9 @@ variable "argocd_application" {
     source = optional(list(object({
       repo_url        = string
       target_revision = optional(string, "HEAD")
-      ref             = optional(string, "")
-      chart           = optional(string, "")
-      path            = optional(string, ".")
+      ref             = optional(string)
+      chart           = optional(string)
+      path            = optional(string)
 
       plugin = optional(object({
         name = optional(string)
@@ -207,8 +207,8 @@ variable "argocd_application" {
     value_files_source = optional(list(object({
       repo_url        = string
       target_revision = optional(string, "HEAD")
-      ref             = optional(string, "")
-      path            = optional(string, ".")
+      ref             = optional(string)
+      path            = optional(string)
     })), [])
 
     managed_namespace_metadata = optional(object({
@@ -227,8 +227,8 @@ variable "argocd_application" {
     }), null)
 
     info = optional(list(object({
-      name  = optional(string, "")
-      value = optional(string, "")
+      name  = optional(string)
+      value = optional(string)
     })), [])
 
     ignore_difference = optional(list(object({
@@ -260,36 +260,36 @@ variable "argocd_project" {
     namespace         = optional(string, "argocd")
 
     destination = optional(list(object({
-      server    = optional(string, "")
-      name      = optional(string, "")
+      server    = optional(string)
+      name      = optional(string)
       namespace = string
     })), [])
 
     role = optional(list(object({
       name        = string
-      description = optional(string, "")
+      description = optional(string)
       policies    = list(string)
       groups      = optional(list(string))
     })), [])
 
     cluster_resource_blacklist = optional(list(object({
-      group = optional(string, "")
-      kind  = optional(string, "")
+      group = optional(string)
+      kind  = optional(string)
     })), [])
 
     cluster_resource_whitelist = optional(list(object({
-      group = optional(string, "")
-      kind  = optional(string, "")
+      group = optional(string)
+      kind  = optional(string)
     })), [])
 
     namespace_resource_blacklist = optional(list(object({
-      group = optional(string, "")
-      kind  = optional(string, "")
+      group = optional(string)
+      kind  = optional(string)
     })), [])
 
     namespace_resource_whitelist = optional(list(object({
-      group = optional(string, "")
-      kind  = optional(string, "")
+      group = optional(string)
+      kind  = optional(string)
     })), [])
 
     orphaned_resources = optional(object({

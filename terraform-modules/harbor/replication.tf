@@ -15,7 +15,7 @@ resource "harbor_replication" "replication" {
   speed                  = each.value.speed
 
   dynamic "filters" {
-    for_each = { for i in each.value.filters : format("%s-%s-%#v-%s-%s", i.name, i.decoration, i.labels, i.resource, i.tag) => i }
+    for_each = can(each.value.filters) && each.value.filters != null ? each.value.filters : []
     content {
       name       = filters.value.name
       decoration = filters.value.decoration

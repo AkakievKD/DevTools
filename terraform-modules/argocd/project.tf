@@ -14,7 +14,7 @@ resource "argocd_project" "project" {
     signature_keys    = each.value.signature_keys
 
     dynamic "destination" {
-      for_each = { for i in each.value.destination : format("%s-%s-%s", i.server, i.name, i.namespace) => i }
+      for_each = can(each.value.destination) && each.value.destination != null ? each.value.destination : []
       content {
         server    = destination.value.server
         name      = destination.value.name
@@ -23,7 +23,7 @@ resource "argocd_project" "project" {
     }
 
     dynamic "cluster_resource_blacklist" {
-      for_each = { for i in each.value.cluster_resource_blacklist : format("%s-%s", i.group, i.kind) => i }
+      for_each = can(each.value.cluster_resource_blacklist) && each.value.cluster_resource_blacklist != null ? each.value.cluster_resource_blacklist : []
       content {
         group = cluster_resource_blacklist.value.group
         kind  = cluster_resource_blacklist.value.kind
@@ -31,7 +31,7 @@ resource "argocd_project" "project" {
     }
 
     dynamic "cluster_resource_whitelist" {
-      for_each = { for i in each.value.cluster_resource_whitelist : format("%s-%s", i.group, i.kind) => i }
+      for_each = can(each.value.cluster_resource_whitelist) && each.value.cluster_resource_whitelist != null ? each.value.cluster_resource_whitelist : []
       content {
         group = cluster_resource_whitelist.value.group
         kind  = cluster_resource_whitelist.value.kind
@@ -39,7 +39,7 @@ resource "argocd_project" "project" {
     }
 
     dynamic "namespace_resource_blacklist" {
-      for_each = { for i in each.value.namespace_resource_blacklist : format("%s-%s", i.group, i.kind) => i }
+      for_each = can(each.value.namespace_resource_blacklist) && each.value.namespace_resource_blacklist != null ? each.value.namespace_resource_blacklist : []
       content {
         group = namespace_resource_blacklist.value.group
         kind  = namespace_resource_blacklist.value.kind
@@ -47,7 +47,7 @@ resource "argocd_project" "project" {
     }
 
     dynamic "namespace_resource_whitelist" {
-      for_each = { for i in each.value.namespace_resource_whitelist : format("%s-%s", i.group, i.kind) => i }
+      for_each = can(each.value.namespace_resource_whitelist) && each.value.namespace_resource_whitelist != null ? each.value.namespace_resource_whitelist : []
       content {
         group = namespace_resource_whitelist.value.group
         kind  = namespace_resource_whitelist.value.kind
@@ -57,21 +57,21 @@ resource "argocd_project" "project" {
     dynamic "orphaned_resources" {
       for_each = can(each.value.orphaned_resources) && each.value.orphaned_resources != null ? [each.value.orphaned_resources] : []
       content {
-        warn = try(orphaned_resources.value.warn, null)
+        warn = orphaned_resources.value.warn
 
         dynamic "ignore" {
           for_each = can(orphaned_resources.value.ignore) && orphaned_resources.value.ignore != null ? orphaned_resources.value.ignore : []
           content {
-            group = try(ignore.value.group, null)
-            kind  = try(ignore.value.kind, null)
-            name  = try(ignore.value.name, null)
+            group = ignore.value.group
+            kind  = ignore.value.kind
+            name  = ignore.value.name
           }
         }
       }
     }
 
     dynamic "role" {
-      for_each = { for i in each.value.role : format("%s-%s-%#v-%#v", i.name, i.description, i.policies, i.groups) => i }
+      for_each = can(each.value.role) && each.value.role != null ? each.value.role : []
       content {
         name        = role.value.name
         description = role.value.description
@@ -83,14 +83,14 @@ resource "argocd_project" "project" {
     dynamic "sync_window" {
       for_each = can(each.value.sync_window) && each.value.sync_window != null ? each.value.sync_window : []
       content {
-        kind         = try(sync_window.value.kind, null)
-        applications = try(sync_window.value.applications, null)
-        clusters     = try(sync_window.value.clusters, null)
-        namespaces   = try(sync_window.value.namespaces, null)
-        duration     = try(sync_window.value.duration, null)
-        schedule     = try(sync_window.value.schedule, null)
-        manual_sync  = try(sync_window.value.manual_sync, null)
-        timezone     = try(sync_window.value.timezone, null)
+        kind         = sync_window.value.kind
+        applications = sync_window.value.applications
+        clusters     = sync_window.value.clusters
+        namespaces   = sync_window.value.namespaces
+        duration     = sync_window.value.duration
+        schedule     = sync_window.value.schedule
+        manual_sync  = sync_window.value.manual_sync
+        timezone     = sync_window.value.timezone
       }
     }
   }
