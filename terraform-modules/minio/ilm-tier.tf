@@ -1,4 +1,4 @@
-resource "minio_ilm_tier" "example" {
+resource "minio_ilm_tier" "ilm_tier" {
   for_each              = { for key, value in var.minio_ilm_tier : key => value }
   bucket                = each.value.bucket
   name                  = each.key
