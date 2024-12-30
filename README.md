@@ -8,12 +8,15 @@ This project consists of Terraform modules designed to streamline the management
 
 - Modular structure for reusable Terraform code.
 - Easily configurable input variables for customization.
-- Automated resource management and dependency handling.
-- Supports multiple providers
-  - Helm
-  - Argocd
-  - Harbor
-  - MinIO
+- Automated resource management
+
+## Supported modules
+
+- Helm
+- Argocd
+- Harbor
+- MinIO
+- Vault
 
 ## Project Structure
 
