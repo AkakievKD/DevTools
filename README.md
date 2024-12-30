@@ -21,39 +21,38 @@ This project consists of Terraform modules designed to streamline the management
 ## Project Structure
 
 ```plaintext
-├── modules
-│   ├── aws
-│   │   ├── s3_bucket
-│   │   └── ec2_instance
-│   ├── azure
-│   │   ├── storage_account
-│   │   └── virtual_machine
-│   ├── minio
-│   │   ├── bucket_replication
-│   │   └── ilm_tier
+├── terraform-modules
+│   ├── argocd
+│   ├── harbor
+│   ├── helm
+|   ├── minio
+|   ├── vault-secrets
 ├── examples
-│   ├── aws_example
-│   ├── azure_example
-│   └── minio_example
-├── main.tf
-├── variables.tf
-└── outputs.tf
+│   ├── argocd
+│   ├── harbor
+│   ├── helm
+|   ├── minio
+|   ├── vault-secrets
 ```
 
 ## Requirements
 
-- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) v1.4+
+- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads)
+- [Registry Mirror](https://docs.comcloud.xyz)
+
 - Provider plugins:
-  - [AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest)
-  - [Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest)
-  - [MinIO Provider](https://registry.terraform.io/providers/aminueza/minio/latest)
+  - [Argocd](https://registry.terraform.io/providers/argoproj-labs/argocd/latest)
+  - [Harbor](https://registry.terraform.io/providers/goharbor/harbor/latest)
+  - [Helm](https://registry.terraform.io/providers/hashicorp/helm/latest)
+  - [MinIO](https://registry.terraform.io/providers/aminueza/minio/latest)
+  - [Vault](https://registry.terraform.io/providers/hashicorp/vault/latest)
 
 ## Getting Started
 
 ### Prerequisites
 
 1. Install Terraform CLI.
-2. Set up credentials for your desired cloud providers.
+2. Set up credentials for your desired providers.
 
 ### Usage
 
@@ -89,54 +88,9 @@ Clean up the deployed resources:
 terraform destroy
 ```
 
-## Examples
+### Modules Examples
 
-### AWS S3 Bucket
-
-```hcl
-module "s3_bucket" {
-  source      = "./modules/aws/s3_bucket"
-  bucket_name = "my-example-bucket"
-  region      = "us-west-2"
-}
-```
-
-### Azure Storage Account
-
-```hcl
-module "storage_account" {
-  source              = "./modules/azure/storage_account"
-  storage_account_name = "examplestorage"
-  resource_group_name  = "example-rg"
-}
-```
-
-### MinIO Bucket Replication
-
-```hcl
-module "bucket_replication" {
-  source  = "./modules/minio/bucket_replication"
-  bucket  = "source-bucket"
-  target  = {
-    access_key = "minio-access-key"
-    bucket     = "target-bucket"
-    host       = "https://minio.example.com"
-    secure     = true
-  }
-}
-```
-
-## Documentation
-
-### Providers
-
-- [AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest)
-- [Azure Provider Documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest)
-- [MinIO Provider Documentation](https://registry.terraform.io/providers/aminueza/minio/latest)
-
-### Modules
-
-Detailed documentation for each module is available within their respective directories.
+Detailed documentation for each module is available within their respective directorie "examples".
 
 ## Contributing
 
@@ -149,9 +103,8 @@ Contributions are welcome! Please follow these steps:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
 - [HashiCorp](https://www.hashicorp.com/) for Terraform.
-- Open-source contributors for their amazing work on provider plugins.
