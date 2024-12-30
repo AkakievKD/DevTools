@@ -40,12 +40,13 @@ This project consists of Terraform modules designed to streamline the management
 - [Terraform CLI](https://developer.hashicorp.com/terraform/downloads)
 - [Registry Mirror](https://docs.comcloud.xyz)
 
-- Provider plugins:
-  - [Argocd](https://registry.terraform.io/providers/argoproj-labs/argocd/latest)
-  - [Harbor](https://registry.terraform.io/providers/goharbor/harbor/latest)
-  - [Helm](https://registry.terraform.io/providers/hashicorp/helm/latest)
-  - [MinIO](https://registry.terraform.io/providers/aminueza/minio/latest)
-  - [Vault](https://registry.terraform.io/providers/hashicorp/vault/latest)
+## Provider plugins
+
+- [Argocd](https://registry.terraform.io/providers/argoproj-labs/argocd/latest)
+- [Harbor](https://registry.terraform.io/providers/goharbor/harbor/latest)
+- [Helm](https://registry.terraform.io/providers/hashicorp/helm/latest)
+- [MinIO](https://registry.terraform.io/providers/aminueza/minio/latest)
+- [Vault](https://registry.terraform.io/providers/hashicorp/vault/latest)
 
 ## Getting Started
 
