@@ -1,0 +1,50 @@
+{{- if .Values.networkPolicy }}
+{{- range .Values.networkPolicy.policies }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .name | trunc 63 }}
+  namespace: {{ include "fullnamespace" $ }}
+spec:
+  {{- if .podSelectorLabels }}
+  podSelector:
+    matchLabels: {{- .podSelectorLabels | toYaml | nindent 10 }}
+  {{- else }}
+  podSelector: {}
+  {{- end }}
+  policyTypes: {{- .policyTypes | toYaml | nindent 4 }}
+  {{- if .ingress }}
+  ingress:
+    {{- range .ingress }}
+    - from:
+        {{- range .from }}
+        {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- if .ports }}
+      ports:
+        {{- range .ports }}
+        - protocol: {{ .protocol }}
+          port: {{ .port }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- if .egress }}
+  egress:
+    {{- range .egress }}
+    - to:
+        {{- range .to }}
+        {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- if .ports }}
+      ports:
+        {{- range .ports }}
+        - protocol: {{ .protocol }}
+          port: {{ .port }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}

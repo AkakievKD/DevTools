@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fullname" . }}
+  namespace: {{ include "fullnamespace" . }}
+  labels: {{- include "custom.appValues" .Values.appLabels | nindent 4 }}
+    name: {{ include "fullname" . }}
+spec:
+  ports:
+    {{- range .Values.service}}
+    - port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      protocol: TCP
+      name: {{ .portName | trunc 63 }}
+    {{- end }}
+  selector: {{- include "custom.appValues" .Values.appLabels | nindent 4 }}
+    name: {{ include "fullname" . }}
