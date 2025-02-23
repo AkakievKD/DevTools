@@ -1,5 +1,5 @@
 resource "grafana_dashboard_permission" "dashboard_permission" {
-  for_each = { for key in var.grafana_dashboard_permission : key.dashboard_uid => key }
+  for_each = var.grafana_dashboard_permission
 
   dashboard_uid = each.value.dashboard_uid
   org_id        = each.value.org_id

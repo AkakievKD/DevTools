@@ -1,5 +1,5 @@
 resource "grafana_data_source_config" "data_source_config" {
-  for_each = { for key in var.grafana_data_source_config : key.uid => key }
+  for_each = var.grafana_data_source_config
 
   http_headers             = each.value.http_headers
   json_data_encoded        = each.value.json_data_encoded

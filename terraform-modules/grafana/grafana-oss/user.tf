@@ -1,7 +1,7 @@
 resource "grafana_user" "user" {
-  for_each = { for key, value in var.grafana_user : key => value }
+  for_each = var.grafana_user
 
-  email    = each.key
+  email    = each.value.email
   name     = each.value.name
   login    = each.value.login
   password = each.value.password

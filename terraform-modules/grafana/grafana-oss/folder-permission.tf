@@ -1,5 +1,5 @@
 resource "grafana_folder_permission" "folder_permission" {
-  for_each = { for key in var.grafana_folder_permission : key.folder_uid => key }
+  for_each = var.grafana_folder_permission
 
   org_id     = each.value.org_id
   folder_uid = each.value.folder_uid

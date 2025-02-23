@@ -1,7 +1,7 @@
 resource "grafana_playlist" "playlist" {
-  for_each = { for key, value in var.grafana_playlist : key => value }
+  for_each = var.grafana_playlist
 
-  name     = each.key
+  name     = each.value.name
   interval = each.value.interval
   org_id   = each.value.org_id
 

@@ -1,5 +1,5 @@
 resource "grafana_annotation" "annotation" {
-  for_each = { for key in var.grafana_annotation : key.text => key }
+  for_each = var.grafana_annotation
 
   text          = each.value.text
   dashboard_uid = each.value.dashboard_uid

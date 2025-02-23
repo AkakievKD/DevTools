@@ -1,10 +1,10 @@
 resource "grafana_sso_settings" "sso_settings" {
-  for_each = { for key, value in var.grafana_sso_settings : key => value }
+  count = var.grafana_sso_settings == null ? 0 : 1
 
-  provider_name = each.key
+  provider_name = var.grafana_sso_settings.provider_name
 
   dynamic "ldap_settings" {
-    for_each = can(each.value.ldap_settings) && each.value.ldap_settings != null ? each.value.ldap_settings : []
+    for_each = can(var.grafana_sso_settings.ldap_settings) && var.grafana_sso_settings.ldap_settings != null ? [var.grafana_sso_settings.ldap_settings] : []
     content {
       allow_sign_up      = ldap_settings.value.allow_sign_up
       enabled            = ldap_settings.value.enabled
@@ -53,7 +53,7 @@ resource "grafana_sso_settings" "sso_settings" {
   }
 
   dynamic "oauth2_settings" {
-    for_each = can(each.value.oauth2_settings) && each.value.oauth2_settings != null ? each.value.oauth2_settings : []
+    for_each = can(var.grafana_sso_settings.oauth2_settings) && var.grafana_sso_settings.oauth2_settings != null ? [var.grafana_sso_settings.oauth2_settings] : []
     content {
       client_id                  = oauth2_settings.value.client_id
       client_secret              = oauth2_settings.value.client_secret
@@ -98,7 +98,7 @@ resource "grafana_sso_settings" "sso_settings" {
   }
 
   dynamic "saml_settings" {
-    for_each = can(each.value.saml_settings) && each.value.saml_settings != null ? each.value.saml_settings : []
+    for_each = can(var.grafana_sso_settings.saml_settings) && var.grafana_sso_settings.saml_settings != null ? [var.grafana_sso_settings.saml_settings] : []
     content {
       enabled                    = saml_settings.value.enabled
       allow_idp_initiated        = saml_settings.value.allow_idp_initiated

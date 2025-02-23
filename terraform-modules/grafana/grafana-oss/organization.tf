@@ -1,7 +1,7 @@
 resource "grafana_organization" "organization" {
-  for_each = { for key, value in var.grafana_organization : key => value }
+  for_each = var.grafana_organization
 
-  name                 = each.key
+  name                 = each.value.name
   admin_user           = each.value.admin_user
   create_users         = each.value.create_users
   admins               = each.value.admins

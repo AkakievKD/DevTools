@@ -1,5 +1,5 @@
 resource "grafana_folder" "folder" {
-  for_each = { for key in var.grafana_folder : key.title => key }
+  for_each = var.grafana_folder
 
   title                        = each.value.title
   uid                          = each.value.uid

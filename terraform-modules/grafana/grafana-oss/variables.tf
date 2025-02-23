@@ -44,14 +44,14 @@ variable "grafana_service_account_permission" {
 }
 
 variable "grafana_service_account_permission_item" {
-  type = list(object({
+  type = map(object({
     org_id             = optional(string)
     service_account_id = string
     permission         = string
     team               = optional(string)
     user               = optional(string)
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_service_account_token" {
@@ -64,18 +64,18 @@ variable "grafana_service_account_token" {
 }
 
 variable "grafana_organization_preferences" {
-  type = list(object({
+  type = map(object({
     home_dashboard_uid = optional(string)
     theme              = optional(string)
     timezone           = optional(string)
     week_start         = optional(string)
     org_id             = string
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_annotation" {
-  type = list(object({
+  type = map(object({
     text          = string
     dashboard_uid = optional(string)
     org_id        = optional(string)
@@ -84,11 +84,11 @@ variable "grafana_annotation" {
     time          = optional(string)
     time_end      = optional(string)
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_dashboard_public" {
-  type = list(object({
+  type = map(object({
     dashboard_uid          = string
     access_token           = optional(string)
     annotations_enabled    = optional(bool)
@@ -98,33 +98,33 @@ variable "grafana_dashboard_public" {
     time_selection_enabled = optional(bool)
     uid                    = optional(string)
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_data_source_config" {
-  type = list(object({
+  type = map(object({
     http_headers             = optional(map(string))
     json_data_encoded        = optional(string)
     org_id                   = optional(string)
     secure_json_data_encoded = optional(string)
     uid                      = string
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_library_panel" {
-  type = list(object({
-    http_headers             = optional(map(string))
-    json_data_encoded        = optional(string)
-    org_id                   = optional(string)
-    secure_json_data_encoded = optional(string)
-    uid                      = string
+  type = map(object({
+    name       = string
+    model_json = string
+    folder_uid = optional(string)
+    org_id     = optional(string)
+    uid        = optional(string)
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_playlist" {
-  type = list(object({
+  type = map(object({
     name     = string
     interval = string
     org_id   = optional(string)
@@ -136,11 +136,12 @@ variable "grafana_playlist" {
       value = optional(string)
     }))
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_dashboard_permission" {
-  type = list(object({
+  type = map(object({
+
     dashboard_uid = string
     org_id        = optional(string)
 
@@ -151,11 +152,11 @@ variable "grafana_dashboard_permission" {
       user_id    = optional(string)
     })), [])
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_folder_permission" {
-  type = list(object({
+  type = map(object({
     folder_uid = string
     org_id     = optional(string)
 
@@ -166,18 +167,18 @@ variable "grafana_folder_permission" {
       user_id    = optional(string)
     })), [])
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_folder" {
-  type = list(object({
+  type = map(object({
     title                        = string
     uid                          = optional(string)
     org_id                       = optional(string)
     parent_folder_uid            = optional(string)
     prevent_destroy_if_not_empty = optional(bool)
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_user" {
@@ -192,7 +193,7 @@ variable "grafana_user" {
 }
 
 variable "grafana_team" {
-  type = list(object({
+  type = map(object({
     name                             = string
     email                            = optional(string)
     ignore_externally_synced_members = optional(bool)
@@ -204,11 +205,11 @@ variable "grafana_team" {
     preferences_week_start           = optional(string)
     team_sync_groups                 = optional(set(string))
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_folder_permission_item" {
-  type = list(object({
+  type = map(object({
     folder_uid = string
     team       = optional(string)
     permission = string
@@ -216,11 +217,12 @@ variable "grafana_folder_permission_item" {
     role       = optional(string)
     org_id     = optional(string)
   }))
-  default = []
+  default = {}
 }
 
 variable "grafana_organization" {
   type = map(object({
+    name                 = string
     admin_user           = optional(string)
     create_users         = optional(bool)
     admins               = optional(set(string))
@@ -234,7 +236,6 @@ variable "grafana_organization" {
 variable "grafana_dashboard" {
   type = list(object({
     dashboards_path = string
-    config_json     = string
     folder          = string
     message         = optional(string)
     org_id          = optional(string)
@@ -244,7 +245,46 @@ variable "grafana_dashboard" {
 }
 
 variable "grafana_sso_settings" {
-  type = map(object({
+  type = object({
+    provider_name = string
+
+    ldap_settings = optional(object({
+      allow_sign_up      = optional(bool)
+      enabled            = optional(bool)
+      skip_org_role_sync = optional(bool)
+
+      servers = optional(list(object({
+        host                               = string
+        search_base_dns                    = list(string)
+        search_filter                      = string
+        attributes                         = optional(map(string))
+        bind_dn                            = optional(string)
+        bind_password                      = optional(string)
+        client_cert                        = optional(string)
+        client_cert_value                  = optional(string)
+        client_key                         = optional(string)
+        client_key_value                   = optional(string)
+        group_search_base_dns              = optional(list(string))
+        group_search_filter                = optional(string)
+        group_search_filter_user_attribute = optional(string)
+        min_tls_version                    = optional(string)
+        port                               = optional(number)
+        root_ca_cert                       = optional(string)
+        root_ca_cert_value                 = optional(list(string))
+        ssl_skip_verify                    = optional(bool)
+        start_tls                          = optional(bool)
+        timeout                            = optional(number)
+        tls_ciphers                        = optional(list(string))
+        use_ssl                            = optional(bool)
+
+        group_mappings = optional(list(object({
+          group_dn      = string
+          org_role      = string
+          grafana_admin = optional(bool)
+          org_id        = optional(number)
+        })), [])
+      })), [])
+    }), null)
 
     oauth2_settings = optional(object({
       client_id                  = string
@@ -327,44 +367,6 @@ variable "grafana_sso_settings" {
       client_secret              = optional(string)
       token_url                  = optional(string)
     }), null)
-
-    ldap_settings = optional(object({
-      allow_sign_up      = optional(bool)
-      enabled            = optional(bool)
-      skip_org_role_sync = optional(bool)
-
-      servers = optional(list(object({
-        host                               = string
-        search_base_dns                    = list(string)
-        search_filter                      = string
-        attributes                         = optional(map(string))
-        bind_dn                            = optional(string)
-        bind_password                      = optional(string)
-        client_cert                        = optional(string)
-        client_cert_value                  = optional(string)
-        client_key                         = optional(string)
-        client_key_value                   = optional(string)
-        group_search_base_dns              = optional(list(string))
-        group_search_filter                = optional(string)
-        group_search_filter_user_attribute = optional(string)
-        min_tls_version                    = optional(string)
-        port                               = optional(number)
-        root_ca_cert                       = optional(string)
-        root_ca_cert_value                 = optional(list(string))
-        ssl_skip_verify                    = optional(bool)
-        start_tls                          = optional(bool)
-        timeout                            = optional(number)
-        tls_ciphers                        = optional(list(string))
-        use_ssl                            = optional(bool)
-
-        group_mappings = optional(list(object({
-          group_dn      = string
-          org_role      = string
-          grafana_admin = optional(bool)
-          org_id        = optional(number)
-        })), [])
-      })), [])
-    }), null)
-  }))
-  default = {}
+  })
+  default = null
 }

@@ -1,5 +1,5 @@
 resource "grafana_dashboard_public" "dashboard_public" {
-  for_each = { for key in var.grafana_dashboard_public : key.dashboard_uid => key }
+  for_each = var.grafana_dashboard_public
 
   dashboard_uid          = each.value.dashboard_uid
   access_token           = each.value.access_token

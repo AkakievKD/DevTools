@@ -1,5 +1,5 @@
 resource "grafana_organization_preferences" "organization_preferences" {
-  for_each = { for key in var.grafana_organization_preferences : key.org_id => key }
+  for_each = var.grafana_organization_preferences
 
   home_dashboard_uid = each.value.home_dashboard_uid
   theme              = each.value.theme

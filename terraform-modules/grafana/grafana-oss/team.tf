@@ -1,5 +1,5 @@
 resource "grafana_team" "team" {
-  for_each = { for key in var.grafana_team : key.name => key }
+  for_each = var.grafana_team
 
   name                             = each.value.name
   email                            = each.value.email
