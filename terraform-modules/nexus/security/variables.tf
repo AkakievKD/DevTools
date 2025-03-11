@@ -1,8 +1,8 @@
 variable "nexus_security_ldap_order" {
-  type = object({
+  type = map(object({
     order = list(string)
-  })
-  default = null
+  }))
+  default = {}
 }
 
 variable "nexus_security_realms" {
@@ -13,7 +13,7 @@ variable "nexus_security_realms" {
 }
 
 variable "nexus_security_ldap" {
-  type = object({
+  type = map(object({
     auth_password                  = optional(string)
     auth_realm                     = optional(string)
     auth_schema                    = string
@@ -44,8 +44,8 @@ variable "nexus_security_ldap" {
     user_password_attribute        = optional(string)
     user_real_name_attribute       = optional(string)
     user_subtree                   = optional(bool)
-  })
-  default = null
+  }))
+  default = {}
 }
 
 variable "nexus_security_user_token" {

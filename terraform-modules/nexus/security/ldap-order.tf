@@ -1,5 +1,5 @@
 resource "nexus_security_ldap_order" "security_ldap_order" {
-  count = var.nexus_security_ldap_order == null ? 0 : 1
+  for_each = var.nexus_security_ldap_order
 
-  order = var.nexus_security_ldap_order.order
+  order = each.value.order
 }

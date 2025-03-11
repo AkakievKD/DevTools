@@ -1,19 +1,10 @@
-resource "nexus_repository_docker_hosted" "repository_docker_hosted" {
-  for_each = { for key, value in var.nexus_repository_apt_hosted : key => value }
+resource "nexus_repository_pypi_hosted" "repository_pypi_hosted" {
+  for_each = { for key, value in var.nexus_repository_pypi_hosted : key => value }
 
   name   = each.key
   online = each.value.online
 
-  docker {
-    force_basic_auth = each.value.docker_force_basic_auth
-    v1_enabled       = each.value.docker_v1_enabled
-    http_port        = each.value.docker_http_port
-    https_port       = each.value.docker_https_port
-    subdomain        = each.value.docker_subdomain
-  }
-
   storage {
-    latest_policy                  = each.value.storage_latest_policy
     blob_store_name                = each.value.storage_blob_store_name
     strict_content_type_validation = each.value.storage_strict_content_type_validation
     write_policy                   = each.value.storage_write_policy

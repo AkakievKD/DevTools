@@ -1,5 +1,5 @@
-resource "nexus_repository_pypi_hosted" "repository_pypi_hosted" {
-  for_each = { for key, value in var.nexus_repository_pypi_hosted : key => value }
+resource "nexus_repository_nuget_hosted" "repository_nuget_hosted" {
+  for_each = { for key, value in var.nexus_repository_nuget_hosted : key => value }
 
   name   = each.key
   online = each.value.online

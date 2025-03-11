@@ -1,5 +1,5 @@
-resource "nexus_repository_raw_hosted" "example" {
-  for_each = { for key, value in var.nexus_repository_raw_hosted : key => value }
+resource "nexus_repository_rubygems_hosted" "repository_rubygems_hosted" {
+  for_each = { for key, value in var.nexus_repository_rubygems_hosted : key => value }
 
   name   = each.key
   online = each.value.online
