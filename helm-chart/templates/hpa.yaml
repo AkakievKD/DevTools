@@ -11,7 +11,54 @@ spec:
     name: {{ include "fullname" . }}
   minReplicas: {{ .Values.autoscaling.min }}
   maxReplicas: {{ .Values.autoscaling.max }}
-  metrics: {{- toYaml .Values.autoscaling.metrics | nindent 4 }}
+  metrics:
+  {{- range .Values.autoscaling.metrics }}
+    - type: {{ .type }}
+      {{- if eq .type "Resource" }}
+      resource:
+        name: {{ .resource.name }}
+      {{- end }}
+      {{- if eq .type "ContainerResource" }}
+      containerResource:
+        container: {{ .containerResource.container }}
+        name: {{ .containerResource.name }}
+      {{- end }}
+      {{- if eq .type "Pods" }}
+      pods:
+      {{- end }}
+      {{- if eq .type "Object" }}
+      object:
+        describedObject:
+          apiVersion: {{ .object.describedObject.apiVersion }}
+          kind: {{ .object.describedObject.kind }}
+          name: {{ .object.describedObject.name }}
+      {{- end }}
+      {{- if eq .type "External" }}
+      external:
+      {{- end }}
+        {{- if or (eq .type "Pods") (eq .type "Object") (eq .type "External") }}
+        metric:
+          name: {{ .metric.name }}
+          {{- if .metric.selector }}
+          selector:
+            {{- if .metric.selector.matchLabels }}
+            matchLabels: {{- toYaml .metric.selector.matchLabels | nindent 14 }}
+            {{- end }}
+            {{- if .metric.selector.matchExpressions }}
+            matchExpressions: {{- toYaml .metric.selector.matchExpressions | nindent 14 }}
+            {{- end }}
+          {{- end }}
+        target:
+          type: {{ .target.type }}
+          {{- if eq .target.type "Utilization" }}
+          averageUtilization: {{ .target.averageUtilization }}
+          {{- else if eq .target.type "AverageValue" }}
+          averageValue: {{ .target.averageValue }}
+          {{- else if eq .target.type "Value" }}
+          value: {{ .target.value }}
+          {{- end }}
+      {{- end }}
+  {{- end }}
   {{- if .Values.autoscaling.behavior }}
   behavior:
     {{- if .Values.autoscaling.behavior.scaleUp }}
@@ -22,8 +69,8 @@ spec:
       {{- if .Values.autoscaling.behavior.scaleUp.selectPolicy }}
       selectPolicy: {{ .Values.autoscaling.behavior.scaleUp.selectPolicy }}
       {{- end }}
-      {{- range .Values.autoscaling.behavior.scaleUp.policies }}
       policies:
+      {{- range .Values.autoscaling.behavior.scaleUp.policies }}
         - type: {{ .type }}
           value: {{ .value }}
           periodSeconds: {{ .periodSeconds }}
@@ -37,8 +84,8 @@ spec:
       {{- if .Values.autoscaling.behavior.scaleDown.selectPolicy }}
       selectPolicy: {{ .Values.autoscaling.behavior.scaleDown.selectPolicy }}
       {{- end }}
-      {{- range .Values.autoscaling.behavior.scaleDown.policies }}
       policies:
+      {{- range .Values.autoscaling.behavior.scaleDown.policies }}
         - type: {{ .type }}
           value: {{ .value }}
           periodSeconds: {{ .periodSeconds }}
