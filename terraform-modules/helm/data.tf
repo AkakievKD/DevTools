@@ -1,4 +1,4 @@
-data "helm_template" "helm_chart_template" {
+data "helm_template" "helm-chart-template" {
   for_each                   = { for key, value in var.helm_template : key => value }
   chart                      = each.value.chart
   name                       = each.key
@@ -16,7 +16,7 @@ data "helm_template" "helm_chart_template" {
   keyring                    = each.value.keyring
   kube_version               = each.value.kube_version
   manifest                   = each.value.manifest
-  manifests                  = each.value.manifests
+  manifests                  = each.value.manifest
   namespace                  = each.value.namespace
   notes                      = each.value.notes
   pass_credentials           = each.value.pass_credentials
@@ -42,14 +42,14 @@ data "helm_template" "helm_chart_template" {
   values = lookup(each.value, "values", "") != "" ? [for v in lookup(each.value, "values", []) : file(v)] : []
 
   dynamic "postrender" {
-    for_each = { for i in each.value.postrender : format("%s", i.binary_path) => i }
+    for_each = each.value.postrender
     content {
       binary_path = postrender.value.binary_path
     }
   }
 
   dynamic "set" {
-    for_each = { for i in each.value.set : format("%s-%s-%s", i.type, i.name, i.value) => i }
+    for_each = each.value.set
     content {
       type  = set.value.type
       name  = set.value.name
@@ -58,7 +58,7 @@ data "helm_template" "helm_chart_template" {
   }
 
   dynamic "set_list" {
-    for_each = { for i in each.value.set_list : format("%s-%s", i.name, i.value) => i }
+    for_each = each.value.set_list
     content {
       name  = set_list.value.name
       value = set_list.value.value
@@ -66,7 +66,7 @@ data "helm_template" "helm_chart_template" {
   }
 
   dynamic "set_sensitive" {
-    for_each = { for i in each.value.set_sensitive : format("%s-%s-%s", i.type, i.name, i.value) => i }
+    for_each = each.value.set_sensitive
     content {
       type  = set_sensitive.value.type
       name  = set_sensitive.value.name

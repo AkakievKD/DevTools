@@ -1,4 +1,4 @@
-resource "helm_release" "helm_chart" {
+resource "helm_release" "helm-chart" {
   for_each                   = { for key, value in var.helm : key => value }
   name                       = each.key
   namespace                  = each.value.namespace
@@ -38,7 +38,7 @@ resource "helm_release" "helm_chart" {
   values = lookup(each.value, "values", "") != "" ? [for v in lookup(each.value, "values", []) : file(v)] : []
 
   dynamic "postrender" {
-    for_each = { for i in each.value.postrender : format("%s-%#v", i.binary_path, i.args) => i }
+    for_each = each.value.postrender
     content {
       binary_path = postrender.value.binary_path
       args        = postrender.value.args
@@ -46,7 +46,7 @@ resource "helm_release" "helm_chart" {
   }
 
   dynamic "set" {
-    for_each = { for i in each.value.set : format("%s-%s-%s", i.type, i.name, i.value) => i }
+    for_each = each.value.set
     content {
       type  = set.value.type
       name  = set.value.name
@@ -55,7 +55,7 @@ resource "helm_release" "helm_chart" {
   }
 
   dynamic "set_list" {
-    for_each = { for i in each.value.set_list : format("%s-%s", i.name, i.value) => i }
+    for_each = each.value.set_list
     content {
       name  = set_list.value.name
       value = set_list.value.value
@@ -63,7 +63,7 @@ resource "helm_release" "helm_chart" {
   }
 
   dynamic "set_sensitive" {
-    for_each = { for i in each.value.set_sensitive : format("%s-%s-%s", i.type, i.name, i.value) => i }
+    for_each = each.value.set_sensitive
     content {
       type  = set_sensitive.value.type
       name  = set_sensitive.value.name
