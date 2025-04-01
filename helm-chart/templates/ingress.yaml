@@ -20,10 +20,16 @@ spec:
                 port:
                   number: {{ .servicePortNumber }}
           {{- end }}
-  {{- if .Values.ingress.tls.secretName }}
+  {{- if .Values.ingress.tls }}
   tls:
+    {{- range .Values.ingress.tls }}
     - hosts:
-        - {{ .Values.ingress.host }}
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+    {{- end }}
+      {{- if .Values.ingress.tls.secretName }}
       secretName: {{ .Values.ingress.tls.secretName }}
+      {{- end }}
   {{- end }}
 {{- end }}
